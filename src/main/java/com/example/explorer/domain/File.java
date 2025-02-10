@@ -1,5 +1,6 @@
 package com.example.explorer.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,5 +19,6 @@ public class File {
 
     @ManyToOne
     @JoinColumn(name = "folder_id")
+    @JsonBackReference
     private Folder folder;
 }

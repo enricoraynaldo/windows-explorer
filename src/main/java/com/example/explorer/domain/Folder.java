@@ -1,5 +1,7 @@
 package com.example.explorer.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import jakarta.persistence.*;
@@ -20,12 +22,14 @@ public class Folder {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Folder parent;
+    @JoinColumn(name = "parent_folder_id")  // Reference to parent folder
+    private Folder parentFolder;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Folder> subfolders = new ArrayList<>();
-
-    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<File> files = new ArrayList<>();
+
+    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore  // Prevent infinite recursion
+    private List<Folder> subfolders;
 }

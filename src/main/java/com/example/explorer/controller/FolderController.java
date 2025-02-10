@@ -13,29 +13,27 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/folders")
+@RequestMapping("/api/folders")
 public class FolderController {
 
     private final FolderService folderService;
-    private final FileService fileService;
 
-    public FolderController(FolderService folderService, FileService fileService) {
+    public FolderController(FolderService folderService) {
         this.folderService = folderService;
-        this.fileService = fileService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Folder>> getRootFolders() {
-        return ResponseEntity.ok(folderService.getRootFolders());
+    public List<Folder> getAllFolders() {
+        return folderService.getAllFolders();
     }
 
-    @GetMapping("/{id}/subfolders")
-    public ResponseEntity<List<Folder>> getSubfolders(@PathVariable Long id) {
-        return ResponseEntity.ok(folderService.getSubfolders(id));
+    @GetMapping("/{id}")
+    public Folder getFolderWithDetails(@PathVariable Long id) {
+        return folderService.getFolderWithDetails(id);
     }
 
     @GetMapping("/{id}/files")
-    public ResponseEntity<List<File>> getFiles(@PathVariable Long id) {
-        return ResponseEntity.ok(fileService.getFilesInFolder(id));
+    public List<File> getFilesByFolder(@PathVariable Long id) {
+        return folderService.getFilesByFolder(id);
     }
 }
